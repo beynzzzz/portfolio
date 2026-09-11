@@ -1,0 +1,30 @@
+# Secrets / environment variables
+.env
+.env.*
+*.key
+*.pem
+*.p12
+*.pfx
+
+# Private keys
+id_rsa
+id_ed25519
+
+# Backups
+*.bak
+*.backup
+*.tar.gz
+
+# Logs
+*.log
+
+# Editor / OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.swp
+*~
