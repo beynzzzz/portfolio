@@ -3,12 +3,21 @@
     --surface: #11161e;
     --surface-hover: #161d27;
     --border: #242d3a;
+    --border-hover: #3a495d;
+
     --text: #f2f5f8;
     --muted: #94a0ae;
+
     --accent: #6ee7b7;
     --accent-dark: #36b889;
+
     --max-width: 1100px;
 }
+
+
+/* ========================================
+   RESET
+   ======================================== */
 
 * {
     box-sizing: border-box;
@@ -21,6 +30,11 @@ html {
 }
 
 body {
+    min-height: 100vh;
+
+    background: var(--background);
+    color: var(--text);
+
     font-family:
         Inter,
         ui-sans-serif,
@@ -30,8 +44,6 @@ body {
         "Segoe UI",
         sans-serif;
 
-    background: var(--background);
-    color: var(--text);
     line-height: 1.6;
 }
 
@@ -42,25 +54,35 @@ a {
 
 .container {
     width: min(90%, var(--max-width));
-    margin: 0 auto;
+    margin-inline: auto;
 }
 
 
-/* NAVIGATION */
+/* ========================================
+   HEADER / NAVIGATION
+   ======================================== */
 
 header {
+    position: relative;
+    z-index: 10;
+
+    background: rgba(10, 13, 18, 0.96);
     border-bottom: 1px solid var(--border);
-    background: rgba(10, 13, 18, 0.92);
 }
 
 nav {
-    height: 72px;
+    min-height: 72px;
+
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    gap: 30px;
 }
 
 .logo {
+    flex-shrink: 0;
+
     font-size: 1.4rem;
     font-weight: 800;
     letter-spacing: -0.04em;
@@ -72,12 +94,15 @@ nav {
 
 .nav-links {
     display: flex;
+    align-items: center;
     gap: 28px;
 }
 
 .nav-links a {
     color: var(--muted);
+
     font-size: 0.9rem;
+
     transition: color 0.2s ease;
 }
 
@@ -86,10 +111,13 @@ nav {
 }
 
 
-/* HERO */
+/* ========================================
+   HOMEPAGE HERO
+   ======================================== */
 
 .hero {
     min-height: 650px;
+
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -98,6 +126,13 @@ nav {
 .eyebrow,
 .section-label {
     color: var(--accent);
+
+    font-family:
+        "SFMono-Regular",
+        Consolas,
+        "Liberation Mono",
+        monospace;
+
     font-size: 0.78rem;
     font-weight: 700;
     letter-spacing: 0.15em;
@@ -105,7 +140,9 @@ nav {
 
 .hero h1 {
     max-width: 850px;
+
     margin-top: 20px;
+
     font-size: clamp(3rem, 7vw, 5.7rem);
     line-height: 0.98;
     letter-spacing: -0.055em;
@@ -117,24 +154,45 @@ nav {
 
 .hero-text {
     max-width: 650px;
-    color: var(--muted);
+
     margin-top: 30px;
+
+    color: var(--muted);
+
     font-size: 1.1rem;
+    line-height: 1.75;
 }
 
 .hero-buttons {
     display: flex;
+    flex-wrap: wrap;
     gap: 12px;
+
     margin-top: 34px;
 }
 
+
+/* ========================================
+   BUTTONS
+   ======================================== */
+
 .button {
-    display: inline-block;
-    padding: 12px 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 11px 18px;
+
     border-radius: 7px;
-    font-weight: 650;
+
     font-size: 0.92rem;
-    transition: 0.2s ease;
+    font-weight: 650;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
 }
 
 .button.primary {
@@ -144,6 +202,7 @@ nav {
 
 .button.primary:hover {
     background: var(--accent-dark);
+    transform: translateY(-1px);
 }
 
 .button.secondary {
@@ -152,48 +211,68 @@ nav {
 
 .button.secondary:hover {
     background: var(--surface);
+    border-color: var(--border-hover);
 }
 
 
-/* SECTIONS */
+/* ========================================
+   GENERAL SECTIONS
+   ======================================== */
 
 .section {
-    padding: 110px 0;
+    padding: 105px 0;
+
     border-top: 1px solid var(--border);
 }
 
 .section h2 {
     margin-top: 12px;
+
     font-size: clamp(2rem, 4vw, 3.2rem);
+    line-height: 1.1;
     letter-spacing: -0.04em;
 }
 
 .section-intro {
     max-width: 750px;
-    margin-top: 25px;
+
+    margin-top: 24px;
+
     color: var(--muted);
-    font-size: 1.08rem;
+
+    font-size: 1.06rem;
+    line-height: 1.8;
 }
 
 
-/* PROJECTS */
+/* ========================================
+   HOMEPAGE PROJECTS
+   ======================================== */
 
 .project-grid {
     margin-top: 45px;
+
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
     gap: 16px;
 }
 
 .project-card {
     position: relative;
+
     min-height: 360px;
+
     padding: 28px;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    background: var(--surface);
+
     display: flex;
     gap: 24px;
+
+    background: var(--surface);
+
+    border: 1px solid var(--border);
+    border-radius: 12px;
+
     transition:
         transform 0.2s ease,
         background 0.2s ease,
@@ -202,8 +281,9 @@ nav {
 
 .project-card:hover {
     transform: translateY(-3px);
+
     background: var(--surface-hover);
-    border-color: #344254;
+    border-color: var(--border-hover);
 }
 
 .project-card.featured {
@@ -211,18 +291,44 @@ nav {
 }
 
 .project-number {
-    font-family: monospace;
+    flex-shrink: 0;
+
     color: var(--muted);
-    font-size: 0.8rem;
+
+    font-family:
+        "SFMono-Regular",
+        Consolas,
+        "Liberation Mono",
+        monospace;
+
+    font-size: 0.78rem;
+}
+
+.project-card > div:last-child {
+    min-width: 0;
+
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
 }
 
 .project-status {
     display: inline-block;
+
+    margin-bottom: 15px;
+
     color: var(--muted);
+
+    font-family:
+        "SFMono-Regular",
+        Consolas,
+        "Liberation Mono",
+        monospace;
+
     font-size: 0.68rem;
     font-weight: 700;
     letter-spacing: 0.12em;
-    margin-bottom: 15px;
 }
 
 .project-status.live {
@@ -230,72 +336,378 @@ nav {
 }
 
 .project-card h3 {
-    font-size: 1.35rem;
     margin-bottom: 12px;
+
+    font-size: 1.35rem;
+    line-height: 1.35;
 }
 
 .project-card p {
+    max-width: 540px;
+
     color: var(--muted);
+
+    line-height: 1.7;
 }
+
+
+/* ========================================
+   TAGS
+   ======================================== */
 
 .tags {
     display: flex;
     flex-wrap: wrap;
+
     gap: 7px;
-    margin-top: 25px;
+
+    margin-top: 24px;
 }
 
 .tags span,
 .skills span {
+    padding: 6px 9px;
+
+    color: #bdc7d3;
+
     border: 1px solid var(--border);
     border-radius: 6px;
-    padding: 6px 9px;
-    font-family: monospace;
+
+    font-family:
+        "SFMono-Regular",
+        Consolas,
+        "Liberation Mono",
+        monospace;
+
     font-size: 0.76rem;
-    color: #bdc7d3;
 }
 
 
-/* SKILLS */
+/* ========================================
+   PROJECT CARD ACTION
+   ======================================== */
+
+.project-card .project-link {
+    width: fit-content;
+
+    display: inline-flex;
+    align-items: center;
+
+    margin-top: 22px;
+    padding: 9px 13px;
+
+    color: var(--text);
+
+    border: 1px solid var(--border);
+    border-radius: 6px;
+
+    font-family: inherit;
+    font-size: 0.86rem;
+    font-weight: 600;
+
+    transition:
+        color 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.project-card .project-link:hover {
+    color: var(--accent);
+
+    background: var(--surface-hover);
+    border-color: var(--border-hover);
+
+    transform: translateX(2px);
+}
+
+
+/* ========================================
+   SKILLS
+   ======================================== */
 
 .skills {
     display: flex;
     flex-wrap: wrap;
+
     gap: 10px;
+
     margin-top: 35px;
 }
 
 .skills span {
     padding: 9px 13px;
+
     background: var(--surface);
 }
 
 
-/* FOOTER */
+/* ========================================
+   ODYSSEUS CASE STUDY
+   ======================================== */
+
+/*
+   This deliberately gives the project page
+   the same horizontal alignment as the homepage
+   even if the HTML does not include .container.
+*/
+
+.case-hero,
+.case-hero ~ .section {
+    width: min(90%, var(--max-width));
+    margin-inline: auto;
+}
+
+
+/* Case study intro */
+
+.case-hero {
+    padding: 80px 0 72px;
+}
+
+.case-hero .back-link {
+    display: inline-block;
+
+    margin-bottom: 34px;
+
+    color: var(--muted);
+
+    font-size: 0.88rem;
+
+    transition: color 0.2s ease;
+}
+
+.case-hero .back-link:hover {
+    color: var(--accent);
+}
+
+.case-hero .eyebrow {
+    display: block;
+
+    margin-bottom: 14px;
+}
+
+.case-hero h1 {
+    max-width: 800px;
+
+    margin: 0;
+
+    font-size: clamp(3rem, 6vw, 5rem);
+    line-height: 1;
+    letter-spacing: -0.055em;
+}
+
+.case-hero .hero-text {
+    max-width: 720px;
+
+    margin-top: 26px;
+
+    color: var(--muted);
+
+    font-size: 1.08rem;
+    line-height: 1.8;
+}
+
+.case-hero .tags {
+    margin-top: 28px;
+}
+
+
+/* Case study sections */
+
+.case-hero ~ .section {
+    padding: 78px 0;
+
+    border-top: 1px solid var(--border);
+}
+
+.case-hero ~ .section .section-label {
+    display: block;
+
+    margin-bottom: 16px;
+}
+
+.case-hero ~ .section h2 {
+    max-width: 800px;
+
+    margin: 0;
+
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.1;
+    letter-spacing: -0.04em;
+}
+
+.case-hero ~ .section > .section-intro {
+    max-width: 760px;
+
+    margin-top: 22px;
+
+    color: var(--muted);
+
+    font-size: 1.02rem;
+    line-height: 1.8;
+}
+
+
+/* Case study information grid */
+
+.case-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 16px;
+
+    margin-top: 36px;
+}
+
+.case-panel {
+    min-width: 0;
+
+    padding: 25px;
+
+    background: var(--surface);
+
+    border: 1px solid var(--border);
+    border-radius: 11px;
+}
+
+.case-panel h3 {
+    margin: 0 0 10px;
+
+    color: var(--text);
+
+    font-size: 1.05rem;
+    line-height: 1.35;
+}
+
+.case-panel p {
+    margin-top: 9px;
+
+    color: var(--muted);
+
+    font-size: 0.96rem;
+    line-height: 1.75;
+}
+
+.case-panel code {
+    padding: 2px 6px;
+
+    background: var(--background);
+
+    color: var(--text);
+
+    border: 1px solid var(--border);
+    border-radius: 4px;
+
+    font-family:
+        "SFMono-Regular",
+        Consolas,
+        "Liberation Mono",
+        monospace;
+
+    font-size: 0.86em;
+}
+
+
+/* Request path */
+
+.architecture {
+    width: 100%;
+
+    margin: 20px 0 0;
+    padding: 18px 20px;
+
+    overflow-x: auto;
+
+    background: #0c1118;
+
+    color: #c7d0dc;
+
+    border: 1px solid var(--border);
+    border-radius: 7px;
+
+    font-family:
+        "SFMono-Regular",
+        Consolas,
+        "Liberation Mono",
+        monospace;
+
+    font-size: 0.8rem;
+    line-height: 1.75;
+
+    white-space: pre;
+}
+
+
+/* ========================================
+   FOOTER
+   ======================================== */
 
 footer {
-    border-top: 1px solid var(--border);
     padding: 30px 0;
+
+    border-top: 1px solid var(--border);
 }
 
 .footer-content {
     display: flex;
+    align-items: center;
     justify-content: space-between;
+
+    gap: 20px;
+
     color: var(--muted);
+
     font-size: 0.82rem;
 }
 
+.footer-content a {
+    transition: color 0.2s ease;
+}
 
-/* MOBILE */
+.footer-content a:hover {
+    color: var(--accent);
+}
+
+
+/* ========================================
+   MOBILE
+   ======================================== */
 
 @media (max-width: 720px) {
+
+    .container {
+        width: min(90%, var(--max-width));
+    }
+
+
+    /* Navigation */
+
+    nav {
+        min-height: 64px;
+    }
+
+    .nav-links {
+        gap: 16px;
+    }
 
     .nav-links a:not(:last-child) {
         display: none;
     }
 
+
+    /* Homepage */
+
     .hero {
         min-height: 560px;
+    }
+
+    .hero h1 {
+        font-size: clamp(2.8rem, 14vw, 4rem);
+    }
+
+    .section {
+        padding: 70px 0;
     }
 
     .project-grid {
@@ -304,228 +716,59 @@ footer {
 
     .project-card {
         min-height: auto;
+
+        padding: 24px;
     }
 
-    .section {
-        padding: 75px 0;
+
+    /* Case study */
+
+    .case-hero,
+    .case-hero ~ .section {
+        width: min(90%, var(--max-width));
     }
-
-    .footer-content {
-        flex-direction: column;
-        gap: 6px;
-    }
-}
-/* =========================
-   CASE STUDY
-   ========================= */
-
-.case-hero {
-    width: min(88%, 1000px);
-    margin: 0 auto;
-    padding: 80px 0 70px;
-}
-
-.case-hero h1 {
-    margin-top: 12px;
-    font-size: clamp(3rem, 6vw, 5rem);
-    line-height: 1;
-    letter-spacing: -0.055em;
-}
-
-.case-hero .hero-text {
-    max-width: 720px;
-    margin-top: 24px;
-    font-size: 1.05rem;
-}
-
-.case-hero .tags {
-    margin-top: 26px;
-}
-
-.back-link {
-    display: inline-block;
-    margin-bottom: 32px;
-    color: var(--muted);
-    font-size: 0.88rem;
-}
-
-.back-link:hover {
-    color: var(--accent);
-}
-
-
-/* Case-study sections use a narrower reading width */
-
-.case-hero + .section,
-.case-hero ~ .section {
-    width: min(88%, 1000px);
-    margin: 0 auto;
-    padding: 80px 0;
-}
-
-.case-hero ~ .section h2 {
-    margin-top: 10px;
-    font-size: clamp(2rem, 4vw, 3rem);
-}
-
-.case-hero ~ .section .section-intro {
-    max-width: 760px;
-    margin-top: 20px;
-    line-height: 1.8;
-}
-
-
-/* Information cards */
-
-.case-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 16px;
-    margin-top: 34px;
-}
-
-.case-panel {
-    padding: 24px;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    background: var(--surface);
-}
-
-.case-panel h3 {
-    margin-bottom: 9px;
-    font-size: 1.05rem;
-}
-
-.case-panel p {
-    margin-top: 8px;
-    color: var(--muted);
-    line-height: 1.7;
-}
-
-.case-panel code {
-    padding: 2px 6px;
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    background: var(--background);
-    font-family: monospace;
-    font-size: 0.85em;
-}
-
-
-/* Larger full-width technical panel */
-
-.case-panel.full {
-    margin-top: 34px;
-}
-
-
-/* Technical snippets */
-
-.architecture {
-    margin-top: 22px;
-    padding: 20px 22px;
-    overflow-x: auto;
-
-    border: 1px solid var(--border);
-    border-radius: 8px;
-
-    background: #0c1118;
-
-    color: #c8d2dc;
-
-    font-family:
-        "SFMono-Regular",
-        Consolas,
-        "Liberation Mono",
-        monospace;
-
-    font-size: 0.86rem;
-    line-height: 1.7;
-}
-
-
-/* Homepage project action */
-
-.project-card > div:last-child {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-.project-card .project-link {
-    display: inline-flex;
-    width: fit-content;
-    align-items: center;
-
-    margin-top: auto;
-    padding-top: 24px;
-
-    color: var(--accent);
-
-    font-family: monospace;
-    font-size: 0.78rem;
-    font-weight: 600;
-}
-
-.project-card .project-link:hover {
-    color: var(--text);
-    text-decoration: none;
-}
-
-
-/* Mobile */
-
-@media (max-width: 720px) {
 
     .case-hero {
-        width: min(90%, 1000px);
-        padding: 60px 0 55px;
+        padding: 58px 0 52px;
     }
 
-    .case-hero + .section,
+    .case-hero .back-link {
+        margin-bottom: 28px;
+    }
+
+    .case-hero .hero-text {
+        font-size: 1rem;
+    }
+
     .case-hero ~ .section {
-        width: min(90%, 1000px);
-        padding: 60px 0;
+        padding: 58px 0;
     }
 
     .case-grid {
         grid-template-columns: 1fr;
+
+        gap: 14px;
+
+        margin-top: 30px;
+    }
+
+    .case-panel {
+        padding: 21px;
     }
 
     .architecture {
-        font-size: 0.76rem;
+        padding: 15px;
+
+        font-size: 0.72rem;
     }
-}
-/* PROJECT CARD ACTION */
 
-.project-card > div:last-child {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
 
-.project-card .project-link {
-    margin-top: auto;
-    padding-top: 28px;
+    /* Footer */
 
-    display: inline-flex;
-    align-items: center;
-    width: fit-content;
+    .footer-content {
+        flex-direction: column;
+        align-items: flex-start;
 
-    color: var(--accent);
-
-    font-family: monospace;
-    font-size: 0.8rem;
-    font-weight: 600;
-    letter-spacing: 0.03em;
-
-    transition:
-        color 0.2s ease,
-        transform 0.2s ease;
-}
-
-.project-card .project-link:hover {
-    color: var(--text);
-    transform: translateX(4px);
-    text-decoration: none;
+        gap: 6px;
+    }
 }
