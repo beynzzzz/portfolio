@@ -391,3 +391,36 @@ footer {
         font-size: 0.78rem;
     }
 }
+/* PROJECT CARD ACTION */
+
+.project-card > div:last-child {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.project-card .project-link {
+    margin-top: auto;
+    padding-top: 28px;
+
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+
+    color: var(--accent);
+
+    font-family: monospace;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+
+    transition:
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.project-card .project-link:hover {
+    color: var(--text);
+    transform: translateX(4px);
+    text-decoration: none;
+}
