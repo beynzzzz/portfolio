@@ -31,17 +31,31 @@ The website is self-hosted on a Debian Linux mini PC rather than using a managed
 
 ## Architecture
 
+The portfolio is hosted on my Debian mini PC, Odysseus.
+
+Public web traffic reaches the server through Cloudflare Tunnel, which means I do not need to expose ports 80 or 443 directly on my home router.
+
 ```text
-Internet
-   |
-Cloudflare
-   |
-Cloudflare Tunnel
-   |
-cloudflared
-   |
-Caddy
-   |
-Static Portfolio
-   |
-Odysseus Debian Server
+                         Internet
+                            │
+                            ▼
+                       Cloudflare
+                            │
+                            ▼
+                    Cloudflare Tunnel
+                            │
+                            ▼
+                      cloudflared
+                            │
+                    Docker proxy network
+                            │
+                            ▼
+                          Caddy
+                            │
+              ┌─────────────┴─────────────┐
+              │                           │
+              ▼                           ▼
+      Public Portfolio              Internal Services
+        beynz.uk                  Vaultwarden / Grafana
+                                   AdGuard / Uptime Kuma
+                                   Homepage / Diun
