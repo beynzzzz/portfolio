@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Odysseus Homelab | Joshua Nowland</title>
+
+    <meta name="description"
+          content="A technical write-up of my self-hosted Debian homelab, Odysseus.">
+
+    <link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+
+
+<body>
+
+<header>
+    <nav class="container">
+
+        <a class="logo" href="/">
+            JN<span>.</span>
+        </a>
+
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/#projects">Projects</a>
+
+            <a href="https://github.com/beynzzzz"
+               target="_blank"
+               rel="noopener noreferrer">
+                GitHub
+            </a>
+        </div>
+
+    </nav>
+</header>
+
+
+<main>
+
+    <!-- PROJECT INTRO -->
+
+    <section class="case-hero container">
+
+        <a class="back-link" href="/#projects">
+            ← Back to Projects
+        </a>
+
+        <p class="eyebrow">
+            PROJECT 01 / HOMELAB
+        </p>
+
+        <h1>Odysseus</h1>
+
+        <p class="hero-text">
+            My self-hosted Debian server, built as a practical environment
+            for learning Linux, networking, Docker, monitoring, automation
+            and security.
+        </p>
+
+        <div class="tags">
+            <span>Debian</span>
+            <span>Docker</span>
+            <span>Caddy</span>
+            <span>Cloudflare</span>
+            <span>WireGuard</span>
+            <span>Git</span>
+            <span>Bash</span>
+        </div>
+
+    </section>
+
+
+    <!-- BACKGROUND -->
+
+    <section class="section container">
+
+        <p class="section-label">
+            01 / BACKGROUND
+        </p>
+
+        <h2>Why I built it</h2>
+
+        <p class="section-intro">
+            I wanted somewhere I could work with infrastructure myself instead
+            of only learning concepts in theory.
+        </p>
+
+        <p class="section-intro">
+            Odysseus started as a Debian installation on a mini PC and gradually
+            became the main environment I use for experimenting with Linux,
+            Docker, networking and self-hosted services.
+        </p>
+
+        <p class="section-intro">
+            I deliberately kept adding things as I found a reason to use them.
+            The aim wasn't to install as many applications as possible. I wanted
+            each service to give me something useful while also teaching me how
+            the underlying system worked.
+        </p>
+
+    </section>
+
+
+    <!-- HOST -->
+
+    <section class="section container">
+
+        <p class="section-label">
+            02 / HOST
+        </p>
+
+        <h2>The server itself</h2>
+
+        <p class="section-intro">
+            Odysseus runs Debian Linux directly on the mini PC. Docker is used
+            for most application services, while Linux itself handles the host,
+            networking, storage, services and access to the machine.
+        </p>
+
+        <div class="case-grid">
+
+            <div class="case-panel">
+                <h3>Debian</h3>
+
+                <p>
+                    The base operating system. I use it to manage the filesystem,
+                    users, permissions, networking, services and Docker runtime.
+                </p>
+            </div>
+
+
+            <div class="case-panel">
+                <h3>Docker</h3>
+
+                <p>
+                    Most applications run as containers. Docker Compose keeps
+                    each service configuration separate and makes the deployments
+                    easier to reproduce and maintain.
+                </p>
+            </div>
+
+
+            <div class="case-panel">
+                <h3>Persistent storage</h3>
+
+                <p>
+                    Services that need to retain data use Docker volumes or
+                    bind-mounted directories so that container recreation does
+                    not remove application data.
+                </p>
+            </div>
+
+
+            <div class="case-panel">
+                <h3>Docker networking</h3>
+
+                <p>
+                    Containers that need to communicate with each other use
+                    defined Docker networks rather than exposing every service
+                    directly to the host or internet.
+                </p>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- NETWORKING -->
+
+    <section class="section container">
+
+        <p class="section-label">
+            03 / NETWORKING
+        </p>
+
+        <h2>How traffic reaches the server</h2>
+
+        <p class="section-intro">
+            The public portfolio and the private administration side of the
+            homelab are treated differently.
+        </p>
+
+        <div class="case-panel">
+
+            <h3>Public portfolio</h3>
+
+            <p>
+                Visitors connect to Cloudflare first. A Cloudflare Tunnel carries
+                the request back to the cloudflared container running on Odysseus.
+                Caddy then serves the static website.
+            </p>
+
+            <pre class="architecture">
+Browser
+  -> Cloudflare
+  -> Cloudflare Tunnel
+  -> cloudflared
+  -> Caddy
+  -> /srv/www/portfolio
+            </pre>
+
+        </div>
+
+
+        <div class="case-panel" style="margin-top: 16px;">
+
+            <h3>Private services</h3>
+
+            <p>
+                Administrative services are not published in the same way as the
+                portfolio. My Homepage dashboard and management interfaces are
+                accessed from trusted network connections or through WireGuard.
+            </p>
+
+            <p>
+                This keeps the public-facing part of the server separate from the
+                interfaces I use to manage the homelab.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- SERVICES -->
+
+    <section class="section container">
+
+        <p class="section-label">
+            04 / SERVICES
+        </p>
+
+        <h2>What I currently run</h2>
+
+        <div class="case-grid">
+
+            <div class="case-panel">
+
+                <h3>Caddy</h3>
+
+                <p>
+                    Handles HTTPS and reverse proxying for web services.
+                    It also manages certificates for the domains I host.
+                </p>
+
+            </div>
+
+
+            <div class="case-panel">
+
+                <h3>Cloudflared</h3>
+
+                <p>
+                    Maintains the Cloudflare Tunnel used by the public portfolio.
+                    The connection is initiated outbound from Odysseus, so I do
+                    not need to forward web ports from the router.
+                </p>
+
+            </div>
+
+
+            <div class="case-panel">
+
+                <h3>WireGuard</h3>
+
+                <p>
+                    Provides VPN access when I need to reach private homelab
+                    services remotely.
+                </p>
+
+            </div>
+
+
+            <div class="case-panel">
+
+                <h3>Vaultwarden</h3>
+
+                <p>
+                    Self-hosted password manager. This is one of the services
+                    where backups, access control and careful updates matter most.
+                </p>
+
+            </div>
+
+
+            <div class="case-panel">
+
+                <h3>AdGuard Home</h3>
+
+                <p>
+                    Provides DNS filtering for the network and gives me practical
+                    experience working with DNS and local name resolution.
+                </p>
+
+            </div>
+
+
+            <div class="case-panel">
+
+                <h3>Homepage</h3>
+
+                <p>
+                    My private dashboard for accessing services and viewing basic
+                    container resource usage.
+                </p>
+
+            </div>
+
+
+            <div class="case-panel">
+
+                <h3>Grafana</h3>
+
+                <p>
+                    Used for visualising server and container metrics and giving
+                    me a better view of what Odysseus is doing over time.
+                </p>
+
+            </div>
+
+
+            <div class="case-panel">
+
+                <h3>Uptime Kuma</h3>
+
+                <p>
+                    Monitors service availability so I can see when something
+                    becomes unavailable or behaves unexpectedly.
+                </p>
+
+            </div>
+
+
+            <div class="case-panel">
+
+                <h3>Diun</h3>
+
+                <p>
+                    Watches the Docker images I use and sends notifications when
+                    newer images are available.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- SECURITY -->
+
+    <section class="section container">
+
+        <p class="section-label">
+            05 / SECURITY
+        </p>
+
+        <h2>Decisions I made around security</h2>
+
+        <p class="section-intro">
+            Security has mostly been about reducing what is exposed and avoiding
+            giving individual services more access than they need.
+        </p>
+
+
+        <div class="case-grid">
+
+            <div class="case-panel">
+
+                <h3>No web port forwarding</h3>
+
+                <p>
+                    I originally looked at publishing the portfolio through the
+                    normal HTTPS path, but switched to Cloudflare Tunnel instead.
+                    The public site now works without forwarding ports 80 or 443
+                    from my router to the server.
+                </p>
+
+            </div>
+
+
+            <div class="case-panel">
+
+                <h3>Public and private separation</h3>
+
+                <p>
+                    The portfolio is public, while the Homepage dashboard and
+                    administrative services stay on the trusted side of the
+                    environment.
+                </p>
+
+            </div>
+
+
+            <div class="case-panel">
+
+                <h3>Read-only website mount</h3>
+
+                <p>
+                    Caddy serves the production portfolio from
+                    <code>/srv/www/portfolio</code> using a read-only mount.
+                    The live site is not served directly from the Git repository.
+                </p>
+
+            </div>
+
+
+            <div class="case-panel">
+
+                <h3>Secrets outside Git</h3>
+
+                <p>
+                    API tokens, private keys and environment files are kept out
+                    of the public repository. Changes are reviewed before they
+                    are pushed to GitHub.
+                </p>
+
+            </div>
+
+
+            <div class="case-panel">
+
+                <h3>Restricted Git access</h3>
+
+                <p>
+                    Odysseus uses a dedicated SSH deploy key for the portfolio
+                    repository rather than a credential with broad access to
+                    my GitHub account.
+                </p>
+
+            </div>
+
+
+            <div class="case-panel">
+
+                <h3>Security headers</h3>
+
+                <p>
+                    Caddy adds browser security headers to the public site,
+                    including a restrictive Content Security Policy and
+                    protections against framing and content-type sniffing.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- GIT -->
+
+    <section class="section container">
+
+        <p class="section-label">
+            06 / VERSION CONTROL
+        </p>
+
+        <h2>How I manage changes</h2>
+
+        <p class="section-intro">
+            The development version of the portfolio lives in a Git repository
+            under my home directory on Odysseus.
+        </p>
+
+        <div class="case-panel">
+
+            <h3>Git workflow</h3>
+
+            <p>
+                I edit the site in the working repository, review the changes
+                with Git, then create a commit once I am happy with the result.
+                The commits are pushed to the public GitHub repository.
+            </p>
+
+            <p>
+                This gives me a history of the project rather than just having
+                one copy of the finished website.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- DEPLOYMENT -->
+
+    <section class="section container">
+
+        <p class="section-label">
+            07 / DEPLOYMENT
+        </p>
+
+        <h2>Publishing the website</h2>
+
+        <p class="section-intro">
+            GitHub is used for version control, but the website itself is hosted
+            on Odysseus.
+        </p>
+
+        <div class="case-panel">
+
+            <h3>Bash deployment script</h3>
+
+            <p>
+                I wrote a Bash script to handle deployment rather than manually
+                copying files every time the site changes.
+            </p>
+
+            <p>
+                Before deployment it checks the state of the Git repository and
+                creates a copy of the currently deployed site.
+            </p>
+
+            <p>
+                It then copies only the files that are supposed to be public into
+                <code>/srv/www/portfolio</code>.
+            </p>
+
+            <p>
+                Once deployment finishes, the script checks the live site. If
+                the health check fails, the previous version can be restored.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- TROUBLESHOOTING -->
+
+    <section class="section container">
+
+        <p class="section-label">
+            08 / TROUBLESHOOTING
+        </p>
+
+        <h2>Things that did not work first time</h2>
+
+        <p class="section-intro">
+            Some of the most useful parts of the project came from working out
+            why something wasn't behaving as expected.
+        </p>
+
+
+        <div class="case-grid">
+
+            <div class="case-panel">
+
+                <h3>Cloudflare 522</h3>
+
+                <p>
+                    My first attempt at making the portfolio public resulted in
+                    a Cloudflare 522 timeout.
+                </p>
+
+                <p>
+                    The browser could reach Cloudflare, but Cloudflare could not
+                    establish the connection back to Caddy.
+                </p>
+
+                <p>
+                    Instead of opening HTTPS on the router, I changed the design
+                    and introduced Cloudflare Tunnel.
+                </p>
+
+            </div>
+
+
+            <div class="case-panel">
+
+                <h3>Caddy certificate failure</h3>
+
+                <p>
+                    When I first added the new domain, Caddy attempted the normal
+                    HTTP and TLS certificate challenges and failed.
+                </p>
+
+                <p>
+                    The Caddy logs showed that the new site was missing the
+                    Cloudflare DNS challenge configuration already used by my
+                    other services.
+                </p>
+
+                <p>
+                    After applying the existing DNS challenge configuration,
+                    Caddy was able to obtain the certificate correctly.
+                </p>
+
+            </div>
+
+
+            <div class="case-panel">
+
+                <h3>Container updates</h3>
+
+                <p>
+                    I initially updated containers manually without much of a
+                    standard process.
+                </p>
+
+                <p>
+                    I now check the running state first, keep rollback options
+                    where appropriate, pull the new image and verify the service
+                    afterwards.
+                </p>
+
+            </div>
+
+
+            <div class="case-panel">
+
+                <h3>Development vs production</h3>
+
+                <p>
+                    The first version of the portfolio existed only in the Git
+                    working directory.
+                </p>
+
+                <p>
+                    I separated the production files into
+                    <code>/srv/www/portfolio</code> so Caddy does not expose
+                    Git metadata or development files.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- LEARNING -->
+
+    <section class="section container">
+
+        <p class="section-label">
+            09 / WHAT I LEARNED
+        </p>
+
+        <h2>What this project gave me</h2>
+
+        <p class="section-intro">
+            The main benefit has been seeing how technologies that I previously
+            thought about separately actually interact with each other.
+        </p>
+
+        <p class="section-intro">
+            DNS affects how a request finds the server. Cloudflare sits in front
+            of it. The tunnel carries the request to Docker. Caddy decides what
+            should receive it. Linux and Docker networking move the traffic
+            between services, and the application eventually responds.
+        </p>
+
+        <p class="section-intro">
+            I also became much more comfortable checking logs and working
+            backwards through a problem instead of immediately changing
+            configuration.
+        </p>
+
+        <p class="section-intro">
+            My next step is to build a disposable Linux environment where I can
+            deliberately break these components and learn the underlying system
+            in more depth without affecting Odysseus.
+        </p>
+
+    </section>
+
+
+</main>
+
+
+<footer>
+
+    <div class="container footer-content">
+
+        <p>Joshua Nowland</p>
+
+        <a href="/#projects">
+            ← Back to Projects
+        </a>
+
+    </div>
+
+</footer>
+
+
+</body>
+</html>
