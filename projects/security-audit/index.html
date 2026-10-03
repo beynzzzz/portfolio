@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Automated Security Audit | Joshua Nowland</title>
+
+    <link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+
+<body>
+
+    <header class="site-header">
+        <div class="container nav">
+            <a class="logo" href="/">JN.</a>
+
+            <nav>
+                <a href="/">Home</a>
+                <a href="/#projects">Projects</a>
+                <a href="https://github.com/beynzzzz" target="_blank" rel="noopener noreferrer">GitHub</a>
+            </nav>
+        </div>
+    </header>
+
+
+    <main>
+
+        <!-- HERO -->
+        <section class="case-hero container">
+
+            <a class="back-link" href="/#projects">← Back to Projects</a>
+
+            <p class="eyebrow">PROJECT 02 / SECURITY</p>
+
+            <h1>Automated Security Audit</h1>
+
+            <p class="hero-text">
+                A lightweight security monitoring and configuration-drift detection system
+                built for my Debian homelab. It automatically checks the security state of
+                Odysseus, compares it against a known-good baseline, and sends the result
+                directly to my phone.
+            </p>
+
+            <div class="tags">
+                <span>Bash</span>
+                <span>Linux</span>
+                <span>systemd</span>
+                <span>Docker</span>
+                <span>Telegram</span>
+                <span>Security Monitoring</span>
+            </div>
+
+        </section>
+
+
+        <!-- WHY -->
+        <section class="section container case-section">
+
+            <p class="section-label">BACKGROUND</p>
+            <h2>Why I built it</h2>
+
+            <p class="section-intro">
+                As my homelab grew, I ended up running more services, more networking,
+                more credentials and more configuration than I wanted to manually inspect
+                every day. I wanted a way to quickly answer a simple question:
+                is the server still in the state I expect it to be?
+            </p>
+
+            <div class="case-grid">
+
+                <div class="case-panel">
+                    <h3>Manual checking does not scale</h3>
+                    <p>
+                        I was already checking things such as Docker containers, firewall
+                        rules, updates, WireGuard peers and backups manually. That works at
+                        first, but it becomes easy to miss something as the environment grows.
+                    </p>
+                </div>
+
+                <div class="case-panel">
+                    <h3>Detection before remediation</h3>
+                    <p>
+                        I deliberately designed the first version to be read-only. The audit
+                        detects and reports unexpected changes, but does not automatically
+                        modify firewall rules, delete keys, restart services or remove containers.
+                    </p>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- INITIAL BASELINE -->
+        <section class="section container case-section">
+
+            <p class="section-label">DISCOVERY</p>
+            <h2>Establishing a known-good state</h2>
+
+            <p class="section-intro">
+                Before automating anything, I manually inspected the server and recorded what
+                normal looked like. This gave the audit something meaningful to compare against
+                rather than relying on generic assumptions.
+            </p>
+
+            <div class="case-grid">
+
+                <div class="case-panel">
+                    <h3>Firewall</h3>
+                    <p>
+                        UFW was verified as active with a default deny policy for inbound traffic.
+                        SSH was restricted to the home LAN and WireGuard network, while the
+                        WireGuard UDP port remained intentionally reachable.
+                    </p>
+                </div>
+
+                <div class="case-panel">
+                    <h3>SSH</h3>
+                    <p>
+                        Root SSH login was disabled, password authentication was disabled and
+                        public-key authentication was enabled. I also checked for unexpected
+                        privileged users and UID 0 accounts.
+                    </p>
+                </div>
+
+                <div class="case-panel">
+                    <h3>Docker exposure</h3>
+                    <p>
+                        I compared container port mappings against actual listening sockets to
+                        understand what was internal to Docker and what was genuinely published
+                        onto the host network.
+                    </p>
+                </div>
+
+                <div class="case-panel">
+                    <h3>Backups</h3>
+                    <p>
+                        Vaultwarden backups were checked beyond just the systemd exit status.
+                        The audit verifies that a recent database backup actually exists and
+                        is non-empty.
+                    </p>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- WHAT IT CHECKS -->
+        <section class="section container case-section">
+
+            <p class="section-label">AUDIT CONTROLS</p>
+            <h2>What the audit checks</h2>
+
+            <p class="section-intro">
+                The script classifies each result as PASS, WARN or CRITICAL and returns a
+                matching exit code so systemd can distinguish a healthy audit from a serious
+                security condition.
+            </p>
+
+            <div class="case-grid">
+
+                <div class="case-panel">
+                    <h3>Firewall & network exposure</h3>
+                    <p>
+                        Checks UFW status, the default inbound policy, globally published
+                        Docker ports and listening network sockets.
+                    </p>
+                </div>
+
+                <div class="case-panel">
+                    <h3>Authentication</h3>
+                    <p>
+                        Checks SSH configuration and recent SSH authentication failures while
+                        avoiding false positives from normal local sudo password mistakes.
+                    </p>
+                </div>
+
+                <div class="case-panel">
+                    <h3>Privileged access</h3>
+                    <p>
+                        Checks sudo group membership, UID 0 accounts and unexpected NOPASSWD
+                        rules.
+                    </p>
+                </div>
+
+                <div class="case-panel">
+                    <h3>System health</h3>
+                    <p>
+                        Checks failed systemd services, disk usage, pending package updates and
+                        unhealthy Docker containers.
+                    </p>
+                </div>
+
+                <div class="case-panel">
+                    <h3>WireGuard</h3>
+                    <p>
+                        Confirms the expected peer count is still present and helps highlight
+                        unexpected changes to the VPN configuration.
+                    </p>
+                </div>
+
+                <div class="case-panel">
+                    <h3>Backup freshness</h3>
+                    <p>
+                        Checks that the latest Vaultwarden database backup is recent and has
+                        real content rather than trusting the backup job status alone.
+                    </p>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- BASELINE -->
+        <section class="section container case-section">
+
+            <p class="section-label">CONFIGURATION DRIFT</p>
+            <h2>Known-good baselines</h2>
+
+            <p class="section-intro">
+                The audit does not just ask whether a service is running. It also checks whether
+                the server still looks like the version of Odysseus that I deliberately approved.
+            </p>
+
+            <div class="case-grid">
+
+                <div class="case-panel">
+                    <h3>Expected containers</h3>
+                    <p>
+                        The currently running Docker container list is compared against a stored
+                        baseline. A new or missing container produces a CRITICAL result.
+                    </p>
+                </div>
+
+                <div class="case-panel">
+                    <h3>Docker port mappings</h3>
+                    <p>
+                        Container port configuration is compared against the known-good state so
+                        accidental exposure of a service can be detected.
+                    </p>
+                </div>
+
+                <div class="case-panel">
+                    <h3>Listening sockets</h3>
+                    <p>
+                        Active TCP and UDP listeners are compared against the approved list.
+                        Unexpected listeners are treated as critical.
+                    </p>
+                </div>
+
+                <div class="case-panel">
+                    <h3>Security-sensitive files</h3>
+                    <p>
+                        SHA-256 hashes are stored for SSH, sudo, UFW, WireGuard and
+                        <code>authorized_keys</code> configuration files. Any change causes the
+                        integrity check to fail.
+                    </p>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- AUTOMATION -->
+        <section class="section container case-section">
+
+            <p class="section-label">AUTOMATION</p>
+            <h2>systemd service and timer</h2>
+
+            <p class="section-intro">
+                The audit is run automatically by systemd rather than depending on me remembering
+                to execute it manually.
+            </p>
+
+            <div class="case-grid">
+
+                <div class="case-panel">
+                    <h3>Daily scheduled audit</h3>
+                    <p>
+                        A oneshot systemd service runs the security audit each morning. A persistent
+                        timer means that if the server is offline at the scheduled time, the missed
+                        audit runs after the machine returns.
+                    </p>
+                </div>
+
+                <div class="case-panel">
+                    <h3>Immediate path monitoring</h3>
+                    <p>
+                        A systemd path unit watches high-risk configuration locations such as SSH,
+                        sudo, UFW, WireGuard and <code>authorized_keys</code>. A change can trigger
+                        the audit immediately instead of waiting until the next daily run.
+                    </p>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- TELEGRAM -->
+        <section class="section container case-section">
+
+            <p class="section-label">ALERTING</p>
+            <h2>Telegram reporting</h2>
+
+            <p class="section-intro">
+                I reused the Telegram bot already running on Odysseus rather than creating another
+                notification system. The audit sends a compact summary directly to my phone.
+            </p>
+
+            <div class="case-grid">
+
+                <div class="case-panel">
+                    <h3>Daily summary</h3>
+                    <p>
+                        The message includes PASS, WARN and CRITICAL totals, the overall status and
+                        the checks responsible for warnings or failures.
+                    </p>
+                </div>
+
+                <div class="case-panel">
+                    <h3>Secret handling</h3>
+                    <p>
+                        The Telegram token is not stored inside the audit script or Git repository.
+                        The audit references the existing protected token file instead.
+                    </p>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- TROUBLESHOOTING -->
+        <section class="section container case-section">
+
+            <p class="section-label">TROUBLESHOOTING</p>
+            <h2>Problems I had to solve</h2>
+
+            <p class="section-intro">
+                Building the audit exposed several cases where a security control could create
+                misleading results if I did not understand what was actually happening underneath.
+            </p>
+
+            <div class="case-grid">
+
+                <div class="case-panel">
+                    <h3>systemd sandbox caused false UFW failures</h3>
+                    <p>
+                        I initially hardened the audit service with
+                        <code>ProtectSystem=strict</code>. UFW still needed to create
+                        <code>/run/ufw.lock</code> even when only checking status, so the audit
+                        incorrectly reported the firewall as CRITICAL.
+                    </p>
+                    <p>
+                        I identified the problem through journald and changed the service protection
+                        to <code>ProtectSystem=full</code>, keeping useful hardening while allowing
+                        UFW to operate correctly.
+                    </p>
+                </div>
+
+                <div class="case-panel">
+                    <h3>Backup job success was not enough</h3>
+                    <p>
+                        The Vaultwarden backup service was reporting success, but I realised that
+                        checking the service result alone did not prove a usable backup existed.
+                        The audit now verifies the actual artifact, freshness and file size.
+                    </p>
+                </div>
+
+                <div class="case-panel">
+                    <h3>Authentication false positives</h3>
+                    <p>
+                        An early version counted a mistyped local sudo password as a security
+                        warning. I refined the check so it focuses on SSH authentication events
+                        instead of treating every PAM authentication failure equally.
+                    </p>
+                </div>
+
+                <div class="case-panel">
+                    <h3>Docker exposure vs internal ports</h3>
+                    <p>
+                        I learned that a port shown by Docker is not automatically reachable from
+                        the host or internet. The audit distinguishes internal container ports from
+                        host-published mappings and compares both against the known-good design.
+                    </p>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- TEST -->
+        <section class="section container case-section">
+
+            <p class="section-label">VALIDATION</p>
+            <h2>Testing a real CRITICAL condition</h2>
+
+            <p class="section-intro">
+                I did not want to trust the alerting system without proving it could detect a
+                genuine deviation.
+            </p>
+
+            <div class="case-grid">
+
+                <div class="case-panel">
+                    <h3>Controlled test</h3>
+                    <p>
+                        I temporarily started a local HTTP listener on
+                        <code>127.0.0.1:55555</code>. Because that socket was not part of the
+                        approved baseline, the audit detected the change and returned CRITICAL.
+                    </p>
+                </div>
+
+                <div class="case-panel">
+                    <h3>End-to-end alert</h3>
+                    <p>
+                        The service exited with the critical status, the Telegram notification
+                        reached my phone, and after the temporary listener was removed the next
+                        audit returned HEALTHY.
+                    </p>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- RESPONSE -->
+        <section class="section container case-section">
+
+            <p class="section-label">DESIGN DECISION</p>
+            <h2>Why it does not automatically fix everything</h2>
+
+            <p class="section-intro">
+                Automatic remediation sounds attractive, but actions such as deleting SSH keys,
+                modifying firewall rules or stopping containers can create more damage if the
+                detection is wrong.
+            </p>
+
+            <div class="case-grid">
+
+                <div class="case-panel">
+                    <h3>Detect first</h3>
+                    <p>
+                        The current system automatically detects, records and reports security
+                        drift while leaving higher-risk remediation under manual control.
+                    </p>
+                </div>
+
+                <div class="case-panel">
+                    <h3>Future low-risk automation</h3>
+                    <p>
+                        My next improvement is to classify safe, low-risk actions that can be
+                        automated separately, while keeping firewall, credential, key and other
+                        high-impact changes approval-gated.
+                    </p>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- LEARNING -->
+        <section class="section container case-section">
+
+            <p class="section-label">OUTCOME</p>
+            <h2>What I learned</h2>
+
+            <p class="section-intro">
+                The project gave me practical exposure to security monitoring, Linux service
+                management and the difference between checking that something is alive and
+                checking that it is still configured the way I intended.
+            </p>
+
+            <div class="case-grid">
+
+                <div class="case-panel">
+                    <h3>Configuration drift</h3>
+                    <p>
+                        I learned how a known-good baseline can detect unexpected changes to
+                        containers, ports, network listeners and security configuration.
+                    </p>
+                </div>
+
+                <div class="case-panel">
+                    <h3>systemd</h3>
+                    <p>
+                        I used services, timers, path units, exit codes and sandboxing to turn a
+                        Bash script into an unattended security process.
+                    </p>
+                </div>
+
+                <div class="case-panel">
+                    <h3>Security monitoring</h3>
+                    <p>
+                        I learned why useful monitoring needs to avoid false positives, preserve
+                        evidence and report context rather than simply saying that something failed.
+                    </p>
+                </div>
+
+                <div class="case-panel">
+                    <h3>Operational thinking</h3>
+                    <p>
+                        The biggest lesson was that a security control needs to be maintainable.
+                        The project was designed around one person being able to understand,
+                        verify and operate it without creating unnecessary complexity.
+                    </p>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <footer class="site-footer">
+        <div class="container">
+            <a href="/#projects">← Back to Projects</a>
+        </div>
+    </footer>
+
+</body>
+</html>
