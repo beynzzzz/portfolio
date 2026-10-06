@@ -773,10 +773,30 @@ footer {
     }
 }
 .case-section h2 {
-    line-height: 1.2;
+    line-height: 1.35;
     margin-bottom: 1.5rem;
 }
 
 .case-panel h3 {
     line-height: 1.25;
+}
+.problems-link {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.problems-link:hover {
+    background-color: var(--accent);
+    color: var(--background);
+    transform: translateY(-2px);
 }
