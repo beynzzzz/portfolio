@@ -772,3 +772,11 @@ footer {
         gap: 6px;
     }
 }
+.case-section h2 {
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+}
+
+.case-panel h3 {
+    line-height: 1.25;
+}

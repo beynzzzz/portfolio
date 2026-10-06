@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Problems I've Solved | beynz.uk</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="container nav">
+            <a class="logo" href="/">beynz.uk</a>
+
+            <div class="nav-links">
+                <a href="/#about">About</a>
+                <a href="/#projects">Projects</a>
+                <a href="/#problems">Problems Solved</a>
+                <a href="/#skills">Skills</a>
+                <a href="https://github.com/beynzzzz"
+                   target="_blank"
+                   rel="noopener noreferrer">GitHub</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+
+        <section class="case-hero container">
+            <p class="section-label">REAL TROUBLESHOOTING</p>
+            <h1>Problems I've Solved</h1>
+            <p>
+                Real issues I've diagnosed while building, running and maintaining
+                my homelab. These are the problems that taught me the most about
+                networking, DNS, reliability and troubleshooting.
+            </p>
+        </section>
+
+        <section class="section container case-section">
+            <p class="section-label">NETWORKING</p>
+            <h2>Server restart affected household connectivity</h2>
+
+            <div class="case-panel">
+                <p>
+                    After Odysseus became unavailable following a restart, devices
+                    around the house appeared to lose internet access.
+                </p>
+
+                <p>
+                    I tested the local router, external IP connectivity and DNS
+                    separately rather than assuming the broadband connection had
+                    failed.
+                </p>
+
+                <p>
+                    The internet connection itself was healthy, but devices were
+                    configured to use AdGuard running on Odysseus for DNS. When the
+                    server was unavailable, clients could no longer reliably resolve
+                    domain names, which made normal internet services appear offline.
+                </p>
+
+                <p>
+                    This highlighted that Odysseus had become a DNS dependency and
+                    exposed a single point of failure in the network design.
+                </p>
+            </div>
+        </section>
+
+        <section class="section container case-section">
+            <p class="section-label">DNS</p>
+            <h2>Slow DNS made the internet feel broken</h2>
+
+            <div class="case-panel">
+                <p>
+                    On a later incident, Wi-Fi and internet connectivity were both
+                    healthy, but websites were taking several seconds to begin loading.
+                </p>
+
+                <p>
+                    I compared DNS response times and found queries through AdGuard on
+                    Odysseus were taking roughly six to eight seconds, while direct
+                    queries to Google DNS completed in around a tenth of a second.
+                </p>
+
+                <p>
+                    AdGuard logs showed repeated timeouts to the configured Quad9
+                    DNS-over-HTTPS upstream.
+                </p>
+
+                <p>
+                    Because Quad9 was the only configured upstream resolver, the delay
+                    affected every device using AdGuard.
+                </p>
+
+                <p>
+                    I replaced the single upstream dependency with multiple healthy
+                    resolvers, improving both performance and resilience.
+                </p>
+            </div>
+        </section>
+
+<section class="section container case-section">
+    <p class="section-label">APPROACH</p>
+    <h2>How I Troubleshoot</h2>
+
+    <div class="case-panel">
+        <p>
+            When something breaks, I try to isolate the problem rather than changing
+            multiple things at once. I test each layer separately, compare expected
+            behaviour against what I am actually seeing, and use logs and measurements
+            to narrow down the cause.
+        </p>
+
+        <p>
+            I document the issue, the evidence I found and the change that fixed it.
+            This page is a record of those real troubleshooting situations as the
+            homelab continues to develop.
+        </p>
+    </div>
+</section>
+    </main>
+
+</body>
+</html>
