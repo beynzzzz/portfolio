@@ -21,7 +21,8 @@
         <div class="nav-links">
             <a href="#about">About</a>
             <a href="#projects">Projects</a>
-            <a href="#skills">Skills</a>
+            <a href="#problems">Problems Solved</a>
+	    <a href="#skills">Skills</a>
             <a href="https://github.com/beynzzzz"
                target="_blank"
                rel="noopener noreferrer">GitHub</a>
@@ -197,7 +198,77 @@
 
     </section>
 
+    <section class="section container" id="problems">
+    <p class="section-label">REAL TROUBLESHOOTING</p>
+    <h2>Problems I’ve Solved</h2>
 
+    <div class="case-grid">
+
+        <div class="case-panel">
+            <p class="project-status">PROJECT 02 — SECURITY AUDIT</p>
+            <h3>Systemd hardening broke UFW checks</h3>
+            <p>
+                ProtectSystem=strict prevented UFW from creating its runtime lock,
+                causing false CRITICAL audit results. I traced the issue through the
+                systemd journal and adjusted the service to ProtectSystem=full while
+                keeping useful sandboxing in place.
+            </p>
+        </div>
+
+        <div class="case-panel">
+            <p class="project-status">ODYSSEUS — NETWORKING</p>
+            <h3>Server restart affected household connectivity</h3>
+            <p>
+                After Odysseus became unavailable following a restart, devices around
+                the house appeared to lose internet access. Testing showed that the
+                broadband connection itself was still healthy, but clients depended on
+                AdGuard running on Odysseus for DNS.
+            </p>
+            <p>
+                This exposed a single point of failure in the network design and showed
+                me the importance of separating internet connectivity from DNS
+                resolution when troubleshooting.
+            </p>
+        </div>
+
+        <div class="case-panel">
+            <p class="project-status">ODYSSEUS — NETWORKING</p>
+            <h3>Slow DNS made the internet feel broken</h3>
+            <p>
+                DNS requests through AdGuard were taking roughly six to eight seconds,
+                while direct external DNS queries were completing in around a tenth of
+                a second.
+            </p>
+            <p>
+                AdGuard logs showed repeated timeouts to the configured Quad9
+                DNS-over-HTTPS upstream. I removed the single upstream dependency and
+                configured multiple healthy DNS resolvers instead.
+            </p>
+        </div>
+
+        <div class="case-panel">
+            <p class="project-status">PROJECT 02 — SECURITY AUDIT</p>
+            <h3>Authentication checks produced false positives</h3>
+            <p>
+                The first version of the audit treated a mistyped local sudo password
+                as suspicious authentication activity. I narrowed the check to the SSH
+                service journal so it focused on remote authentication failures rather
+                than unrelated local sudo mistakes.
+            </p>
+        </div>
+
+        <div class="case-panel">
+            <p class="project-status">PROJECT 02 — SECURITY AUDIT</p>
+            <h3>A successful backup job didn’t prove the backup worked</h3>
+            <p>
+                I changed the Vaultwarden backup check from simply confirming that the
+                backup service completed successfully to verifying that recent,
+                non-empty backup artifacts were actually created.
+            </p>
+        </div>
+
+    </div>
+</section>
     <!-- SKILLS -->
     <section id="skills" class="section container">
 
