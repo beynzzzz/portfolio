@@ -52,6 +52,8 @@ sudo rsync -a \
     --include='/assets/***' \
     --include='/projects/' \
     --include='/projects/***' \
+    --include='/problems/' \
+    --include='/problems/***' \
     --exclude='*' \
     "$SOURCE/" "$DEST/"
 
